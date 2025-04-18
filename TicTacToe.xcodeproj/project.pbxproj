@@ -11,6 +11,10 @@
 		89CAC8162DB2B39F00910630 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CAC8152DB2B39F00910630 /* ContentView.swift */; };
 		89CAC8182DB2B3A500910630 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89CAC8172DB2B3A500910630 /* Assets.xcassets */; };
 		89CAC81B2DB2B3A500910630 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89CAC81A2DB2B3A500910630 /* Preview Assets.xcassets */; };
+		89CAC8222DB2B6A300910630 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89CAC8212DB2B6A300910630 /* Launch Screen.storyboard */; };
+		89F5FEA62DB2C1F900083E61 /* GameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F5FEA52DB2C1F900083E61 /* GameModel.swift */; };
+		89F5FEA92DB2C91000083E61 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F5FEA82DB2C91000083E61 /* ViewModifiers.swift */; };
+		89F5FEAC2DB2CCFD00083E61 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F5FEAB2DB2CCFD00083E61 /* GameView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +23,10 @@
 		89CAC8152DB2B39F00910630 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		89CAC8172DB2B3A500910630 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		89CAC81A2DB2B3A500910630 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		89CAC8212DB2B6A300910630 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		89F5FEA52DB2C1F900083E61 /* GameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModel.swift; sourceTree = "<group>"; };
+		89F5FEA82DB2C91000083E61 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
+		89F5FEAB2DB2CCFD00083E61 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +59,10 @@
 		89CAC8122DB2B39F00910630 /* TicTacToe */ = {
 			isa = PBXGroup;
 			children = (
+				89F5FEAA2DB2CCD100083E61 /* Game Screen */,
+				89F5FEA72DB2C8F400083E61 /* Utilities */,
+				89F5FEA42DB2C1C200083E61 /* Model */,
+				89CAC8212DB2B6A300910630 /* Launch Screen.storyboard */,
 				89CAC8132DB2B39F00910630 /* TicTacToeApp.swift */,
 				89CAC8152DB2B39F00910630 /* ContentView.swift */,
 				89CAC8172DB2B3A500910630 /* Assets.xcassets */,
@@ -65,6 +77,30 @@
 				89CAC81A2DB2B3A500910630 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		89F5FEA42DB2C1C200083E61 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				89F5FEA52DB2C1F900083E61 /* GameModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		89F5FEA72DB2C8F400083E61 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				89F5FEA82DB2C91000083E61 /* ViewModifiers.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		89F5FEAA2DB2CCD100083E61 /* Game Screen */ = {
+			isa = PBXGroup;
+			children = (
+				89F5FEAB2DB2CCFD00083E61 /* GameView.swift */,
+			);
+			path = "Game Screen";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -125,6 +161,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89CAC8222DB2B6A300910630 /* Launch Screen.storyboard in Resources */,
 				89CAC81B2DB2B3A500910630 /* Preview Assets.xcassets in Resources */,
 				89CAC8182DB2B3A500910630 /* Assets.xcassets in Resources */,
 			);
@@ -139,6 +176,9 @@
 			files = (
 				89CAC8162DB2B39F00910630 /* ContentView.swift in Sources */,
 				89CAC8142DB2B39F00910630 /* TicTacToeApp.swift in Sources */,
+				89F5FEA62DB2C1F900083E61 /* GameModel.swift in Sources */,
+				89F5FEA92DB2C91000083E61 /* ViewModifiers.swift in Sources */,
+				89F5FEAC2DB2CCFD00083E61 /* GameView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,8 +313,9 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -302,8 +343,9 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
