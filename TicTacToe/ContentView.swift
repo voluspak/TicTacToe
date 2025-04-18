@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var game: GameService
     @State private var gameType: GameType = .undetermined
     @State private var yourName: String = ""
     @State private var opponentName: String = ""
@@ -48,6 +49,7 @@ struct ContentView: View {
             .frame(width: 350)
             if gameType != .peer {
                 Button("Start Game") {
+                    game.setupGame(gameType: gameType, playerOneName: yourName, playerTwoName: opponentName)
                     focus = false
                     startGame.toggle()
                 }
@@ -56,7 +58,7 @@ struct ContentView: View {
                     gameType == .undetermined ||
                     gameType == .bot && yourName.isEmpty ||
                     gameType == .single &&
-                    (yourName.isEmpty && opponentName.isEmpty)
+                    (yourName.isEmpty || opponentName.isEmpty)
                 )
                 Image("LaunchScreen")
             }
@@ -73,5 +75,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .environmentObject(GameService())
     }
 }
