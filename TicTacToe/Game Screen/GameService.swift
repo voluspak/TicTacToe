@@ -11,10 +11,10 @@ import SwiftUI
 class GameService: ObservableObject {
     @Published var playerOne = Player(gamePiece: .x, name: "Player 1")
     @Published var playerTwo = Player(gamePiece: .o, name: "Player 2")
-    @Published var movesTaken = [Int]()
     @Published var gameOver = false
     @Published var gameBoard = GameSquare.reset
     @Published var possibleMoves = Move.all
+    @Published var isThinking = false
     
     var gameType = GameType.single
     
@@ -29,7 +29,7 @@ class GameService: ObservableObject {
         playerOne.isCurrent || playerTwo.isCurrent
     }
     var boardDisabled: Bool {
-        gameOver || !gameStarted
+        gameOver || !gameStarted || isThinking
     }
     
     func setupGame(gameType: GameType, playerOneName: String, playerTwoName: String) {
@@ -41,6 +41,7 @@ class GameService: ObservableObject {
             playerTwo.name = playerTwoName
         case .bot:
             self.gameType = .bot
+            playerTwo.name = UIDevice.current.name
         case .peer:
             self.gameType = .peer
         case .undetermined:
@@ -51,7 +52,6 @@ class GameService: ObservableObject {
     func reset() {
         playerOne.isCurrent = false
         playerTwo.isCurrent = false
-        movesTaken.removeAll()
         playerOne.moves.removeAll()
         playerTwo.moves.removeAll()
         gameOver = false
@@ -92,6 +92,11 @@ class GameService: ObservableObject {
                     possibleMoves.remove(at: matchingIndex)
                 }
                 toggleCurrent()
+                if gameType == .bot && currentPlayer.name == playerTwo.name {
+                    Task {
+                        await deviceMove()
+                    }
+                }
             }
             
             if possibleMoves.isEmpty {
@@ -99,6 +104,17 @@ class GameService: ObservableObject {
                 return
             }
         }
+    }
+    
+    func deviceMove() async {
+        isThinking.toggle()
+        try? await Task.sleep(nanoseconds: 1_000_000_000)
+        if let move = possibleMoves.randomElement() {
+            if let matchingIndex = Move.all.firstIndex(where: {$0 == move}) {
+                makeMove(at: matchingIndex)
+            }
+        }
+        isThinking.toggle()
     }
     
 }
