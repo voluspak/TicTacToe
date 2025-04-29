@@ -10,10 +10,15 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject var game: GameService
     @State private var gameType: GameType = .undetermined
-    @State private var yourName: String = ""
+    @AppStorage("yourName") var yourName: String = ""
     @State private var opponentName: String = ""
     @FocusState private var focus: Bool
     @State private var startGame: Bool = false
+    @State private var changeName = false
+    @State private var newName = ""
+    init(yourName: String) {
+        self.yourName = yourName
+    }
     
     var body: some View {
         VStack { 
@@ -31,12 +36,9 @@ struct ContentView: View {
             VStack{
                 switch gameType {
                 case .single:
-                    VStack{
-                        TextField("Your Name", text: $yourName)
                         TextField("Opponent Name", text: $opponentName)
-                    }
                 case .bot:
-                    TextField("Your Name", text: $yourName)
+                    EmptyView()
                 case .peer:
                     EmptyView()
                 case .undetermined:
@@ -56,11 +58,14 @@ struct ContentView: View {
                 .buttonStyle(.borderedProminent)
                 .disabled(
                     gameType == .undetermined ||
-                    gameType == .bot && yourName.isEmpty ||
-                    gameType == .single &&
-                    (yourName.isEmpty || opponentName.isEmpty)
+                    gameType == .single && opponentName.isEmpty
                 )
                 Image("LaunchScreen")
+                Text("Your name is \(yourName)")
+                Button("Change my namne") {
+                    changeName.toggle()
+                }
+                .buttonStyle(.bordered)
             }
         }
         .padding()
@@ -68,13 +73,23 @@ struct ContentView: View {
         .fullScreenCover(isPresented: $startGame) {
             GameView()
         }
+        .alert("Change Name", isPresented: $changeName, actions: {
+            TextField("New Name", text: $newName)
+            Button("Ok", role: .destructive) {
+                yourName = newName
+                exit(-1)
+            }
+            Button("Cancel", role: .cancel) {}
+        }, message: {
+            Text("Tapping on the Ok button will quit the application so you can relaunch to use your changed name.")
+        })
         .inNavigationStack()
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(yourName: "Ejemplo")
             .environmentObject(GameService())
     }
 }
