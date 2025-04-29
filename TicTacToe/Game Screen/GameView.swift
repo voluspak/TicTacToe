@@ -8,17 +8,22 @@
 import SwiftUI
 
 struct GameView: View {
-    @EnvironmentObject var game: GameService
+    @EnvironmentObject var game: GameViewModel
+    @EnvironmentObject var connectionManager: MPConnectionManager
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
         VStack {
-            if [game.playerOne.isCurrent, game.playerTwo.isCurrent].allSatisfy{ $0 == false } {
+            if [game.playerOne.isCurrent, game.playerTwo.isCurrent].allSatisfy({ $0 == false }) {
                 Text("Select a player to start")
             }
             HStack{
                 Button(game.playerOne.name) {
                     game.playerOne.isCurrent = true
+                    if game.gameType == .peer {
+                        let gameMove = MPGameMove(action: .start, playerName: game.playerOne.name, index: nil)
+                        connectionManager.send(gameMove: gameMove)
+                    }
                 }
                 .buttonStyle(PlayerButtonStyle(isCurrent: game.playerOne.isCurrent))
 
@@ -26,8 +31,12 @@ struct GameView: View {
                     game.playerTwo.isCurrent = true
                     if game.gameType == .bot {
                         Task{
-                            await game.deviceMove()
+                            await game.makeBotMove()
                         }
+                    }
+                    if game.gameType == .peer {
+                        let gameMove = MPGameMove(action: .start, playerName: game.playerTwo.name, index: nil)
+                        connectionManager.send(gameMove: gameMove)
                     }
                 }
                 .buttonStyle(PlayerButtonStyle(isCurrent: game.playerTwo.isCurrent))
@@ -61,17 +70,22 @@ struct GameView: View {
                     }
                 }
             }
-            .disabled(game.boardDisabled)
+            .disabled(game.gameOver || !game.playerOne.isCurrent && !game.playerTwo.isCurrent ||
+                      game.gameType == .peer && connectionManager.myPeerId.displayName != game.currentPlayer.name)
             VStack {
                 if game.gameOver {
                     Text("Game Over")
-                    if game.possibleMoves.isEmpty {
+                    if game.coordinator.remainingMoves.isEmpty {
                         Text("Nobody wins")
                     } else {
                         Text("\(game.currentPlayer.name) wins!")
                     }
                     Button("New Game"){
-                        game.reset()
+                        game.startGame(type: game.gameType, playerOneGame: game.playerOne.name, playerTwoName: game.playerTwo.name)
+                        if game.gameType == .peer {
+                            let gameMove = MPGameMove(action: .reset, playerName: nil, index: nil)
+                            connectionManager.send(gameMove: gameMove)
+                        }
                     }
                     .buttonStyle(.borderedProminent)
                 }
@@ -83,13 +97,20 @@ struct GameView: View {
             ToolbarItem(placement: .navigationBarTrailing){
                 Button("End Game"){
                     dismiss()
+                    if game.gameType == .peer {
+                        let gameMove = MPGameMove(action: .end, playerName: nil, index: nil)
+                        connectionManager.send(gameMove: gameMove)
+                    }
                 }
                 .buttonStyle(.bordered)
             }
         }
         .navigationTitle("Tic Tac Toe")
         .onAppear {
-            game.reset()
+            game.startGame(type: game.gameType, playerOneGame: game.playerOne.name, playerTwoName: game.playerTwo.name)
+            if game.gameType == .peer {
+                connectionManager.setup(game: game)
+            }
         }
         .inNavigationStack()
     }
@@ -98,7 +119,8 @@ struct GameView: View {
 struct GameView_Previews: PreviewProvider {
     static var previews: some View {
         GameView()
-            .environmentObject(GameService())
+            .environmentObject(GameViewModel())
+            .environmentObject(MPConnectionManager(yourName: "Sample"))
     }
 }
 

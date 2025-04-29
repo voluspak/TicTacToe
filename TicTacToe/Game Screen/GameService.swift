@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@MainActor
 class GameService: ObservableObject {
     @Published var playerOne = Player(gamePiece: .x, name: "Player 1")
     @Published var playerTwo = Player(gamePiece: .o, name: "Player 2")
