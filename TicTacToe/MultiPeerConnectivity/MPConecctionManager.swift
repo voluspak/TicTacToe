@@ -17,9 +17,9 @@ class MPConnectionManager: NSObject, ObservableObject {
     let myPeerId: MCPeerID
     let nearbyServiceAdvertiser: MCNearbyServiceAdvertiser
     let nearbyServiceBrowser: MCNearbyServiceBrowser
-    var game: GameService?
+    var game: GameViewModel?
     
-    func setup(game:GameService) {
+    func setup(game:GameViewModel) {
         self.game = game
     }
     

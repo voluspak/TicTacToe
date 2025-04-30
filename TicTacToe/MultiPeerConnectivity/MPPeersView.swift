@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MPPeersView: View {
     @EnvironmentObject var connectionManager: MPConnectionManager
-    @EnvironmentObject var game: GameService
+    @EnvironmentObject var game: GameViewModel
     @Binding var startGame: Bool
     var body: some View {
         VStack {

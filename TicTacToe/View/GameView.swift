@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct GameView: View {
-    @EnvironmentObject var game: GameService
+    @EnvironmentObject var game: GameViewModel
     @EnvironmentObject var connectionManager: MPConnectionManager
     @Environment(\.dismiss) var dismiss
     
@@ -31,7 +31,7 @@ struct GameView: View {
                     game.playerTwo.isCurrent = true
                     if game.gameType == .bot {
                         Task{
-                            await game.deviceMove()
+                            await game.makeBotMove()
                         }
                     }
                     if game.gameType == .peer {
@@ -41,7 +41,7 @@ struct GameView: View {
                 }
                 .buttonStyle(PlayerButtonStyle(isCurrent: game.playerTwo.isCurrent))
             }
-            .disabled(game.gameStarted)
+            .disabled(game.playerOne.isCurrent || game.playerTwo.isCurrent)
             VStack{
                 HStack{
                     ForEach(0...2, id: \.self) { index in
@@ -70,18 +70,17 @@ struct GameView: View {
                     }
                 }
             }
-            .disabled(game.boardDisabled ||
-                      game.gameType == .peer && connectionManager.myPeerId.displayName != game.currentPlayer.name)
+            .disabled(disableBoard())
             VStack {
                 if game.gameOver {
                     Text("Game Over")
-                    if game.possibleMoves.isEmpty {
+                    if game.coordinator.remainingMoves.isEmpty {
                         Text("Nobody wins")
                     } else {
                         Text("\(game.currentPlayer.name) wins!")
                     }
                     Button("New Game"){
-                        game.reset()
+                        game.coordinator.reset(playerOne: &game.playerOne, playerTwo: &game.playerTwo, board: &game.board)
                         if game.gameType == .peer {
                             let gameMove = MPGameMove(action: .reset, playerName: nil, index: nil)
                             connectionManager.send(gameMove: gameMove)
@@ -107,19 +106,26 @@ struct GameView: View {
         }
         .navigationTitle("Tic Tac Toe")
         .onAppear {
-            game.reset()
+            game.coordinator.reset(playerOne: &game.playerOne, playerTwo: &game.playerTwo, board: &game.board)
             if game.gameType == .peer {
                 connectionManager.setup(game: game)
             }
         }
         .inNavigationStack()
     }
+    
+    private func disableBoard() -> Bool {
+        game.gameOver || game.isThinking || (
+            game.gameType == .peer &&
+            connectionManager.myPeerId.displayName != (game.playerOne.isCurrent ? game.playerOne.name : game.playerTwo.name)
+        )
+    }
 }
 
 struct GameView_Previews: PreviewProvider {
     static var previews: some View {
         GameView()
-            .environmentObject(GameService())
+            .environmentObject(GameViewModel())
             .environmentObject(MPConnectionManager(yourName: "Sample"))
     }
 }

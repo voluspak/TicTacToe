@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SquareView: View {
-    @EnvironmentObject var game: GameService
+    @EnvironmentObject var game: GameViewModel
     @EnvironmentObject var connectionManager: MPConnectionManager
     let index: Int
     var body: some View {
