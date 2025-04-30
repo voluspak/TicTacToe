@@ -31,6 +31,19 @@ enum GamePiece: String {
     }
 }
 
+struct GameSquare {
+    var id: Int
+    var player: Player?
+    
+    static var reset: [GameSquare] {
+        var squares = [GameSquare]()
+        for index in 1...9 {
+            squares.append(GameSquare(id: index))
+        }
+        return squares
+    }
+}
+
 struct Player {
     let gamePiece: GamePiece
     var name: String

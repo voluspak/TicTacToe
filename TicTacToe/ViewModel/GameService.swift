@@ -118,3 +118,13 @@ class GameService: ObservableObject {
     }
     
 }
+
+extension GameSquare {
+    var image: Image {
+        if let player = player {
+            return player.gamePiece.image
+        } else {
+            return Image("none")
+        }
+    }
+}
