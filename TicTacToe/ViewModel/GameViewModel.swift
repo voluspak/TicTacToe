@@ -67,12 +67,9 @@ class GameViewModel: ObservableObject {
         
         func makeBotMove() async{
             isThinking = true
-            let humanMoves = playerOne.moves
-            print("Bot difficulty is", botService.difficulty)
             
-            let move = await botService.calculateMove(possibleMoves: coordinator.remainingMoves, humanMoves: humanMoves)
+            let move = await botService.calculateMove(possibleMoves: coordinator.remainingMoves, humanMoves: playerOne.moves, IAMoves: playerTwo.moves)
             isThinking = false
-            print("Bot move is: \(move)")
             if let index = Move.all.firstIndex(of: move) {
                 makeMove(at: index)
             }
