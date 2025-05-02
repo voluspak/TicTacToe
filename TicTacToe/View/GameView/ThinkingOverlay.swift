@@ -9,7 +9,17 @@ import SwiftUI
 
 struct ThinkingOverlay: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack{
+                Text("Thinking...")
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 8)
+                    .background(Color.primary)
+            ProgressView()
+                .foregroundColor(.blue)
+        }
+        .padding()
+        .background(Color.black.opacity(0.6))
+        .cornerRadius(8)
     }
 }
 

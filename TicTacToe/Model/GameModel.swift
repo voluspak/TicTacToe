@@ -26,9 +26,6 @@ enum GameType {
 
 enum GamePiece: String {
     case x,o
-    var image: Image{
-        Image(self.rawValue)
-    }
 }
 
 struct Player {
@@ -56,3 +53,18 @@ enum Move {
         [1,5,9]
     ]
 }
+
+struct GameSquare {
+    var id: Int
+    var player: Player?
+    
+    
+    static var reset: [GameSquare] {
+        var squares = [GameSquare]()
+        for index in 1...9 {
+            squares.append(GameSquare(id: index))
+        }
+        return squares
+    }
+}
+

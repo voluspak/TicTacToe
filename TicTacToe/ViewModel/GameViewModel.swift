@@ -26,10 +26,10 @@ class GameViewModel: ObservableObject {
     }
     
     
-    func startGame(type: GameType, playerOneGame: String, playerTwoName: String) {
+    func startGame(type: GameType, playerOneName: String, playerTwoName: String) {
         self.gameType = type
-        playerOne.name = playerOneGame
-        playerTwo.name = playerTwoName
+        playerOne.name = playerOneName
+        playerTwo.name = type == .bot ? UIDevice.current.name : playerTwoName
         resetGame()
     }
         
@@ -67,8 +67,12 @@ class GameViewModel: ObservableObject {
         
         func makeBotMove() async{
             isThinking = true
-            let move = await botService.calculateMove(possibleMoves: coordinator.remainingMoves)
+            let humanMoves = playerOne.moves
+            print("Bot difficulty is", botService.difficulty)
+            
+            let move = await botService.calculateMove(possibleMoves: coordinator.remainingMoves, humanMoves: humanMoves)
             isThinking = false
+            print("Bot move is: \(move)")
             if let index = Move.all.firstIndex(of: move) {
                 makeMove(at: index)
             }

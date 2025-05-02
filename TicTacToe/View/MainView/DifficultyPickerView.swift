@@ -8,11 +8,23 @@
 import SwiftUI
 
 struct DifficultyPickerView: View {
+    @Binding var selection: BotService.Difficulty?
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Picker("Difficulty", selection: $selection) {
+            Text("Select Difficulty").tag(BotService.Difficulty?.none)
+            ForEach(BotService.Difficulty.allCases, id: \.self) { level in
+                Text(level.label).tag(Optional(level))
+            }
+        }
+        .pickerStyle(.menu)
+        .padding(.horizontal)
+        .padding(.vertical, 8)
+        .background(RoundedRectangle(cornerRadius: 10).stroke(lineWidth: 2))
     }
 }
 
 #Preview {
-    DifficultyPickerView()
+    var selection: BotService.Difficulty? = .easy
+    DifficultyPickerView(selection: .constant(selection))
 }

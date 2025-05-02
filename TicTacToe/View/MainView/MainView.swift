@@ -29,7 +29,6 @@ struct MainView: View {
         VStack(spacing: 24) {
             HStack {
                 GameTypePickerView(gameType: $gameType)
-                LanguageSelectorView(locale: $locale)
             }
             
             Text(gameType.description)
@@ -44,6 +43,7 @@ struct MainView: View {
             
             if gameType != .peer {
                 Button("Start Game") {
+                    game.botService.difficulty = selectedDifficulty ?? .easy
                     game.startGame(type: gameType, playerOneName: yourName, playerTwoName: opponentName)
                     focus = false
                     startGame.toggle()
@@ -51,7 +51,8 @@ struct MainView: View {
                 .buttonStyle(.borderedProminent)
                 .disabled(
                     gameType == .undetermined ||
-                    gameType == .single && opponentName.isEmpty
+                    gameType == .single && opponentName.isEmpty ||
+                    gameType == .bot && selectedDifficulty == nil
                 )
                 
                 Image("LaunchScreen")

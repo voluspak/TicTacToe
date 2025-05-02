@@ -8,11 +8,23 @@
 import SwiftUI
 
 struct GameTypePickerView: View {
+    @Binding var gameType: GameType
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Picker("Select Game", selection: $gameType) {
+            Text("Select Game Type").tag(GameType.undetermined)
+            Text("Two Sharing Device").tag(GameType.single)
+            Text("Challenge your device").tag(GameType.bot)
+            Text("Challlenge a friend").tag(GameType.peer)
+
+        }
+        .pickerStyle(.menu)
+        .padding()
+        .background(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(lineWidth: 2))
     }
 }
 
 #Preview {
-    GameTypePickerView()
+    var gameType: GameType = .single
+    GameTypePickerView(gameType: .constant(gameType))
 }

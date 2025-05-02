@@ -8,11 +8,25 @@
 import SwiftUI
 
 struct LanguageSelectorView: View {
+    @Binding var locale: Locale
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Menu {
+            Button(action: { locale = Locale(identifier: "en") }) {
+                Label("English", systemImage: "flag.us")
+            }
+            Button(action: { locale = Locale(identifier: "es") }) {
+                Label("Español", systemImage: "flag.sp")
+            }
+        } label: {
+            Image(systemName: "globe")
+                .font(.title2)
+                .padding(8)
+        }
     }
 }
 
 #Preview {
-    LanguageSelectorView()
+    var locale = Locale(identifier: "en")
+    LanguageSelectorView(locale: .constant(locale))
 }
